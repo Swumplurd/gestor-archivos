@@ -1,4 +1,4 @@
-<footer class="<?php if($_GET['view'] == 'login') {echo 'fixed-bottom';} ?>">
+<footer class="<?php if($_GET['view'] == 'login' || $_GET['view'] == 'home') {echo 'fixed-bottom';} ?>">
   <div class="container">
     <div class="row">
       <div class="col">

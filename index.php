@@ -21,11 +21,17 @@
 <?php
   if (isset($_GET['view'])) {
     switch ($_GET['view']) {
+      case 'home':
+        include_once 'views/home.php';
+        break;
       case 'login':
         include_once 'views/login.php';
         break;
       case 'registro':
         include_once 'views/registro.php';
+        break;
+      case 'gestor':
+        include_once 'views/gestor.php';
         break;
       default:
         include_once 'views/error404.php';

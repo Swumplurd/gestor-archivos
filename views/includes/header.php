@@ -1,4 +1,4 @@
-<div class="container mb-4">
+<div class="container mb-5">
   <div class="row">
     <div class="col">
       <div class="jumbotron mb-0 py-4 bg-dark text-light rounded-0 rounded-bottom">
@@ -20,6 +20,7 @@
             <a class="nav-item nav-link <?php if ($_GET['view'] == 'home') {echo 'active';} ?>" href="home">Home</a>
             <a class="nav-item nav-link <?php if ($_GET['view'] == 'login') {echo 'active';} ?>" href="login">Login</a>
             <a class="nav-item nav-link <?php if ($_GET['view'] == 'registro') {echo 'active';} ?>" href="registro">Registro</a>
+            <a class="nav-item nav-link <?php if ($_GET['view'] == 'gestor') {echo 'active';} ?>" href="gestor">Gestor</a>
           </div>
         </div>
       </nav>
