@@ -12,6 +12,6 @@
         "password-confirm" => $password_confirm
     );
 
-    $usuario = new Usuario();
-    echo $usuario->agregarUsuario($datos);
+    $user = new Usuario();
+    echo $user->agregarUsuario($datos);
 ?>

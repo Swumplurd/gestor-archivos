@@ -12,7 +12,7 @@
           <div class="form-group row">
             <div class="col">
               <label for="fecha-nacimiento">Fecha de Nacimiento</label>
-              <input required type="date" name="fecha-nacimiento" id="fecha-nacimiento" class="form-control" placeholder="" aria-describedby="helpId">
+              <input required type="date" name="fecha-nacimiento" id="fecha-nacimiento"  class="form-control" placeholder="" aria-describedby="helpId">
               <small id="helpId" class="text-muted">Ingresa tu fecha de nacimiento</small>
             </div>
           </div>
@@ -53,13 +53,16 @@
 <script>
   function agregarUsuario() {
     $.ajax({
-      method: 'POST',
+      type: 'POST',
       data: $('#form-registro').serialize(),
       url: 'procesos/agregarUsuario.php',
       success: (response) => {
         response = response.trim();
         if (response == 1) {
-          swal(':D', 'Agregado con exito', 'success')
+          $('#form-registro')[0].reset();
+          swal(':D', 'Agregado con exito', 'success');
+        } else if (response == 2) {
+          swal(':l', 'Este usuario ya existe', 'warning');
         } else {
           swal(':(', 'Valio barriga', 'error')
         }
