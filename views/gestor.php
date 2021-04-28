@@ -1,8 +1,13 @@
+<?php
+    session_start();
+    if(isset($_SESSION['usuario'])) {
+?>
+
 <div class="container mb-5">
     <div class="row">
         <div class="col">
         
-            <table id="tabla" class="table">
+            <table id="tabla" class="table text-center">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -34,3 +39,9 @@
         $('#tabla').DataTable();
     });
 </script>
+
+<?php
+    } else {
+        header('location: sesion');
+    }
+?>

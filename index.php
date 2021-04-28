@@ -33,6 +33,15 @@
       case 'gestor':
         include_once 'views/gestor.php';
         break;
+      case 'categorias':
+        include_once 'views/categorias.php';
+        break;
+      case 'sesion':
+        include_once 'views/session.php';
+        break;
+      case 'salir':
+        include_once 'procesos/logout.php';
+        break;
       default:
         include_once 'views/error404.php';
         break;

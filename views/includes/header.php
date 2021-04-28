@@ -21,6 +21,8 @@
             <a class="nav-item nav-link <?php if ($_GET['view'] == 'login') {echo 'active';} ?>" href="login">Login</a>
             <a class="nav-item nav-link <?php if ($_GET['view'] == 'registro') {echo 'active';} ?>" href="registro">Registro</a>
             <a class="nav-item nav-link <?php if ($_GET['view'] == 'gestor') {echo 'active';} ?>" href="gestor">Gestor</a>
+            <a class="nav-item nav-link <?php if ($_GET['view'] == 'categorias') {echo 'active';} ?>" href="categorias">Categorias</a>
+            <a class="nav-item nav-link text-danger" href="salir">Salir</a>
           </div>
         </div>
       </nav>
