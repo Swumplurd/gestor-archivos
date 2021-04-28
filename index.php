@@ -46,6 +46,5 @@
   require_once 'views/includes/footer.php'
 ?>
 
-</div>
 </body>
 </html>
