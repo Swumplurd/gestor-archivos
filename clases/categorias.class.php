@@ -13,5 +13,29 @@
             
             return $respuesta;
         }
+
+        public function eliminarCat($idCategoria) {
+            $conexion = Conexion::conectar();
+
+            $sql = "DELETE FROM t_categorias WHERE id_categoria = ?";
+            $query = $conexion->prepare($sql);
+            $query->bind_param('i', $idCategoria);
+            $respuesta = $query->execute();
+            $query->close();
+            return $respuesta;
+        }
+
+        public function obtenerCategoria($idCategoria) {
+            $conexion = Conexion::conectar();
+
+            $sql = "SELECT id_categoria, nombre FROM t_categorias WHERE id_categoria = $idCategoria";
+            $result = mysqli_query($conexion, $sql);
+            $categorias = mysqli_fetch_array($result);
+            $datos = array(
+                "idCategoria" => $categorias['id_categoria'],
+                "nombreCategoria" => $categorias['nombre']
+            );
+            return $datos;
+        }
     }
 ?>
