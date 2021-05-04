@@ -137,6 +137,34 @@ if (isset($_SESSION['usuario'])) {
         }
       });
     }
+
+    function actualizaCategoria(idCategoria) {
+      console.log($('#actualiza-categoria').serialize());
+      if ($('#categoriaU').val() == '') {
+        swal('No hay categoria');
+        return false;
+      } else {
+        $.ajax({
+          type: 'POST',
+          data: $('#actualiza-categoria').serialize(),
+          url: 'procesos/actualizaCat.php',
+          success: (result) => {
+            result = result.trim();
+
+            if (result == 1) {
+              //Fakta Actualizar Tabla
+              swal('Actualizado con exito', 'success');
+            } else {
+              swal('No pude hacer na de na', 'error');
+            }
+          }
+        });
+      }
+    }
+
+    $('#actualiza-cat').click(() => {
+      actualizaCategoria();
+    });
   </script>
 
 <?php

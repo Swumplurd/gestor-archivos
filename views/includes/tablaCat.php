@@ -56,11 +56,11 @@
             <fieldset>
             <legend>Actualizar Categoria</legend>
             <div class="form-group">
-                <input hidden required type="text" name="categoria" id="nombre-categoria" class="form-control" placeholder="" aria-describedby="helpId">
+                <input required type="text" name="categoria" id="categoria" class="form-control" placeholder="" aria-describedby="helpId">
 
                 <label for="categoriaU">Nombre de la Categoria</label>
                 <input required type="text" name="categoriaU" id="categoriaU" class="form-control" placeholder="" aria-describedby="helpId">
-                <small id="helpId" class="text-muted">Ingresa el nombre de la categoria</small>
+                <small id="helpId" class="text-muted">Ingresa el nuevo nombre de la categoria</small>
             </div>
             </fieldset>
         </form>
