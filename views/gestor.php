@@ -49,6 +49,18 @@ if (isset($_SESSION['usuario'])) {
     <div class="row">
       <div class="col">
 
+        <?php
+          require_once './clases/conexion.php';
+
+          $c = new Conexion();
+          $conexion = $c->conectar();
+          $idUsuario = $_SESSION['id_usuario'];
+          $sql = "SELECT archivos.id_archivo AS idArchivo, usuario.nombre AS nombreUsuario, categoriAS.nombre AS categoria, archivos.nombre AS nombreArchivo, archivos.tipo AS tipoArchivo, archivos.ruta AS rutaArchivo, archivos.fecha AS fecha
+            FROM t_archivos AS archivos INNER JOIN t_usuarios as usuario ON archivos.id_usuario = usuario.id_usuario INNER JOIN t_categorias AS categorias ON archivos.id_categoria = categorias.id_categoria
+            AND archivos.id_usuario = '$idUsuario'";
+          $result = mysqli_query($conexion, $sql);
+        ?>
+
         <table id="tablaGestorArchivos" class="table text-center">
           <thead>
             <tr>
@@ -60,15 +72,30 @@ if (isset($_SESSION['usuario'])) {
             </tr>
           </thead>
           <tbody>
+
+          <?php
+            while ($mostrar = mysqli_fetch_array($result)) {
+              $rutaDescarga = "archivos/" . "$idUsuario" . "/" .$mostrar['nombreArchivo'];
+              $nombreArchivo = $mostrar['nombreArchivo'];
+              $idArchivo = $mostrar['idArchivo']
+          ?>
+
             <tr>
-              <td scope="row"></td>
-              <td></td>
-              <td></td>
+              <td scope="row"><?php echo $mostrar['nombreArchivo'] ?></td>
+              <td><?php echo $mostrar['tipoArchivo'] ?></td>
+              <td>
+                <a class="btn btn-outline-primary" href="<?php echo $rutaDescarga?>" download="<?php echo $nombreArchivo?>">⤵</a>
+              </td>
               <td></td>
               <td>
-                <a class="btn btn-outline-danger" href="eliminar">🚯</a>
+                <a class="btn btn-outline-danger" onclick="eliminarArchivo(<?php echo $idArchivo?>)">🚯</a>
               </td>
             </tr>
+
+            <?php
+              }
+            ?>
+
           </tbody>
         </table>
 
@@ -104,6 +131,45 @@ if (isset($_SESSION['usuario'])) {
         });
       });
     });
+
+    function eliminarArchivo(idArchivo) {
+      idArchivo = parseInt(idArchivo);
+      if (idArchivo < 1) {
+        swal('No hay id de archivo');
+        return false
+      } else {
+        swal({
+            title: "Estas seguro de borrar el archivo?",
+            text: "Una vez eliminado, no podra recuperarse",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              $.ajax({
+                type: 'POST',
+                data: "idArchivo=" + idArchivo,
+                url: 'procesos/eliminarFile.php',
+                success: (result) => {
+                  result = result.trim();
+                  console.log(result);
+                  if (result == 1) {
+                    //Falta recargar la tabla
+                    swal("Poof! Tu archivo ha sido eliminada!", {
+                      icon: "success",
+                    });
+                  } else {
+                    swal("No se pudo eliminar el archivo", {
+                      icon: "error",
+                    });
+                  }
+                }
+              });
+            }
+          });
+      }
+    }
   </script>
 
 <?php
