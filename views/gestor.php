@@ -50,20 +50,21 @@ if (isset($_SESSION['usuario'])) {
       <div class="col">
 
         <?php
-          require_once './clases/conexion.php';
+        require_once './clases/conexion.php';
 
-          $c = new Conexion();
-          $conexion = $c->conectar();
-          $idUsuario = $_SESSION['id_usuario'];
-          $sql = "SELECT archivos.id_archivo AS idArchivo, usuario.nombre AS nombreUsuario, categoriAS.nombre AS categoria, archivos.nombre AS nombreArchivo, archivos.tipo AS tipoArchivo, archivos.ruta AS rutaArchivo, archivos.fecha AS fecha
+        $c = new Conexion();
+        $conexion = $c->conectar();
+        $idUsuario = $_SESSION['id_usuario'];
+        $sql = "SELECT archivos.id_archivo AS idArchivo, usuario.nombre AS nombreUsuario, categoriAS.nombre AS categoria, archivos.nombre AS nombreArchivo, archivos.tipo AS tipoArchivo, archivos.ruta AS rutaArchivo, archivos.fecha AS fecha
             FROM t_archivos AS archivos INNER JOIN t_usuarios as usuario ON archivos.id_usuario = usuario.id_usuario INNER JOIN t_categorias AS categorias ON archivos.id_categoria = categorias.id_categoria
             AND archivos.id_usuario = '$idUsuario'";
-          $result = mysqli_query($conexion, $sql);
+        $result = mysqli_query($conexion, $sql);
         ?>
 
         <table id="tablaGestorArchivos" class="table text-center">
           <thead>
             <tr>
+              <th>Categoria</th>
               <th>Nombre</th>
               <th>Extension</th>
               <th>Descargar</th>
@@ -73,31 +74,67 @@ if (isset($_SESSION['usuario'])) {
           </thead>
           <tbody>
 
-          <?php
+            <?php
             while ($mostrar = mysqli_fetch_array($result)) {
-              $rutaDescarga = "archivos/" . "$idUsuario" . "/" .$mostrar['nombreArchivo'];
+              $rutaDescarga = "archivos/" . "$idUsuario" . "/" . $mostrar['nombreArchivo'];
               $nombreArchivo = $mostrar['nombreArchivo'];
               $idArchivo = $mostrar['idArchivo']
-          ?>
+            ?>
 
-            <tr>
-              <td scope="row"><?php echo $mostrar['nombreArchivo'] ?></td>
-              <td><?php echo $mostrar['tipoArchivo'] ?></td>
-              <td>
-                <a class="btn btn-outline-primary" href="<?php echo $rutaDescarga?>" download="<?php echo $nombreArchivo?>">⤵</a>
-              </td>
-              <td></td>
-              <td>
-                <a class="btn btn-outline-danger" onclick="eliminarArchivo(<?php echo $idArchivo?>)">🚯</a>
-              </td>
-            </tr>
+              <tr>
+                <td scope="row"><?php echo $mostrar['categoria'] ?></td>
+                <td><?php echo $mostrar['nombreArchivo'] ?></td>
+                <td><?php echo $mostrar['tipoArchivo'] ?></td>
+                <td>
+                  <a class="btn btn-outline-primary" href="<?php echo $rutaDescarga ?>" download="<?php echo $nombreArchivo ?>">⤵</a>
+                </td>
+                
+                <td>
+                  <?php
+                  $extensionesValidas = array('png', 'jpg', 'pdf', 'mp3', 'mp4');
+                  for ($i = 0; $i < count($extensionesValidas); $i++) {
+                    if ($extensionesValidas[$i] == $mostrar['tipoArchivo']) {
+                  ?>
+                      <a class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#mirar" onclick="ver(<?php echo $idArchivo ?>)">
+                        👀
+                      </a>
+                  <?php
+                    }
+                  }
+                  ?>
+                </td>
+                
+                <td>
+                  <a class="btn btn-outline-danger" onclick="eliminarArchivo(<?php echo $idArchivo ?>)">🚯</a>
+                </td>
+              </tr>
 
             <?php
-              }
+            }
             ?>
 
           </tbody>
         </table>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="mirar" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Archivo</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                <div id="archivoObtenido"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -110,7 +147,7 @@ if (isset($_SESSION['usuario'])) {
 
       $('#btnGuardarArchivos').click(() => {
         var formData = new FormData(document.getElementById('nuevo-archivo'));
-        $.ajax({  
+        $.ajax({
           url: 'procesos/guardarArchivos.php',
           type: 'POST',
           datatype: "html",
@@ -120,7 +157,7 @@ if (isset($_SESSION['usuario'])) {
           processData: false,
           success: (response) => {
             console.log(response);
-            response =  response.trim();
+            response = response.trim();
             if (response == 1) {
               //Falta recargar tabla
               swal(":D", "Se agrego con exito el archivo", "success");
@@ -170,6 +207,18 @@ if (isset($_SESSION['usuario'])) {
           });
       }
     }
+
+    function ver(id_archivo) {
+    console.log(id_archivo);
+    $.ajax({
+        type: "POST",
+        data: "id_archivo=" + id_archivo,
+        url: "procesos/obtenerArchivo.php",
+        success: function(respuesta) {
+            $('#archivoObtenido').html(respuesta);
+        }
+    });
+}
   </script>
 
 <?php
