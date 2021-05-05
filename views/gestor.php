@@ -30,7 +30,7 @@ if (isset($_SESSION['usuario'])) {
                     </div>
                     <div class="form-group">
                       <label for="archivos">Subir</label>
-                      <input type="file" name="archivos" id="archivos" class="form-control" placeholder="" aria-describedby="helpId">
+                      <input type="file" name="archivos[ ]" id="archivos[ ]" class="form-control" multiple="">
                       <small id="helpId" class="text-muted">Sube tus archivos</small>
                     </div>
                   </fieldset>
@@ -49,7 +49,7 @@ if (isset($_SESSION['usuario'])) {
     <div class="row">
       <div class="col">
 
-        <table id="tabla" class="table text-center">
+        <table id="tablaGestorArchivos" class="table text-center">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -78,7 +78,7 @@ if (isset($_SESSION['usuario'])) {
 
   <script>
     $(document).ready(() => {
-      $('#tabla').DataTable();
+      $('#tablaGestorArchivos').DataTable();
       $('#categoriasLoad').load('views/includes/selectCat.php');
 
       $('#btnGuardarArchivos').click(() => {
@@ -93,7 +93,13 @@ if (isset($_SESSION['usuario'])) {
           processData: false,
           success: (response) => {
             console.log(response);
-            console.log('object');
+            response =  response.trim();
+            if (response == 1) {
+              //Falta recargar tabla
+              swal(":D", "Se agrego con exito el archivo", "success");
+            } else {
+              swal("D:", "No se agrego", "error");
+            }
           }
         });
       });
